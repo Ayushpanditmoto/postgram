@@ -695,40 +695,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                               ],
                             ),
-                            Text(
-                              snapshot.data!['faculty'],
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              snapshot.data!['department'],
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                             const SizedBox(
                               height: 5,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: theme.themeMode == ThemeMode.light
-                                    ? Colors.grey.withOpacity(0.3)
-                                    : Colors.grey.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                snapshot.data!['batch'],
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
                             ),
                           ],
                         ),

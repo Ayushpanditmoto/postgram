@@ -8,6 +8,10 @@ class CustomTheme {
       fontFamily: GoogleFonts.poppins(
         fontWeight: FontWeight.w700,
       ).fontFamily,
+      iconTheme: const IconThemeData(
+        color: Colors.black,
+        size: 30,
+      ),
     );
   }
 
@@ -18,6 +22,10 @@ class CustomTheme {
         fontWeight: FontWeight.w700,
       ).fontFamily,
       brightness: Brightness.dark,
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+        size: 30,
+      ),
     );
   }
 }
