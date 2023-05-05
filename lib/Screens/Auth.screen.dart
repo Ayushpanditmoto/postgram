@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:postgram/Services/auth.services.dart';
+import 'package:image_picker/image_picker.dart';
+import '../Services/auth.services.dart';
 import 'package:postgram/Utils/Toast.service.dart';
 import 'package:postgram/Utils/route.reuse.dart';
 import '../Components/text.form.field.dart';
@@ -18,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
   TextEditingController passwordC1 = TextEditingController();
+  File? image;
 
   bool isPasswordVisible = true;
   bool isPasswordVisible1 = true;
@@ -43,6 +50,16 @@ class _AuthScreenState extends State<AuthScreen> {
     passwordC = TextEditingController();
     passwordC1 = TextEditingController();
     super.initState();
+  }
+
+  void selectImage() async {
+    final picker = ImagePicker();
+    XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -99,6 +116,38 @@ class _AuthScreenState extends State<AuthScreen> {
                         const SizedBox(
                           height: 100,
                         ),
+                        if (_authMode == AuthMode.signup)
+                          image != null
+                              ? InkWell(
+                                  onTap: () {
+                                    selectImage();
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:
+                                        MemoryImage(image!.readAsBytesSync()),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    selectImage();
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          'https://i.stack.imgur.com/l60Hf.png',
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         TextEnterArea(
                           controller: emailC,
                           textInputAction: TextInputAction.next,
@@ -211,33 +260,46 @@ class _AuthScreenState extends State<AuthScreen> {
                             });
                             try {
                               if (_authMode == AuthMode.login) {
-                                await AuthServies.signIn(
-                                        emailC.text, passwordC.text)
-                                    .then((value) {
-                                  ToastService.show(
-                                    msg: "Login Success",
-                                  );
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MyRouter.generateRoute(
-                                      const RouteSettings(name: MyRouter.home),
-                                    ),
-                                  );
-                                });
+                                await AuthMethod().loginUser(
+                                  email: emailC.text,
+                                  password: passwordC.text,
+                                );
+
+                                ToastService.show(
+                                  msg: "Login Success",
+                                );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MyRouter.generateRoute(
+                                    const RouteSettings(name: MyRouter.home),
+                                  ),
+                                );
                               } else {
-                                await AuthServies.signUp(
-                                        emailC.text, passwordC.text)
-                                    .then((value) {
-                                  ToastService.show(
-                                    msg: "Sign Up Success",
-                                  );
+                                final res = await AuthMethod().signUpUser(
+                                  email: emailC.text,
+                                  password: passwordC.text,
+                                  gender: "",
+                                  name: emailC.text.split("@")[0],
+                                  image: File(image!.path).readAsBytesSync(),
+                                );
+                                print(res);
+
+                                if (res == "Verification Email Sent") {
                                   Navigator.pushReplacement(
                                     context,
                                     MyRouter.generateRoute(
                                       const RouteSettings(name: MyRouter.home),
                                     ),
                                   );
-                                });
+
+                                  ToastService.show(
+                                    msg: "Verification Email Sent",
+                                  );
+                                } else {
+                                  ToastService.show(
+                                    msg: res,
+                                  );
+                                }
                               }
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {

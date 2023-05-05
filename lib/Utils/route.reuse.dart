@@ -15,12 +15,18 @@ class MyRouter {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case MyRouter.auth:
         return MaterialPageRoute(builder: (_) => const AuthScreen());
-      case MyRouter.comment:
-        return MaterialPageRoute(builder: (_) => const CommentScreen());
+      // case MyRouter.comment:
+      //   return MaterialPageRoute(
+      //       builder: (_) => const Comments(
+      //             snaps: {},
+      //           ));
       case MyRouter.createPost:
         return MaterialPageRoute(builder: (_) => const CreatePost());
-      case MyRouter.profile:
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      // case MyRouter.profile:
+      //   return MaterialPageRoute(
+      //       builder: (_) => const ProfileScreen(
+      //             uid: '',
+      //           ));
 
       default:
         return MaterialPageRoute(
