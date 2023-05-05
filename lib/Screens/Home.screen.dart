@@ -83,6 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               IconButton(
                 onPressed: () {
+                  //if route is home then do nothing
+                  if (ModalRoute.of(context)!.settings.name == MyRouter.home) {
+                    return;
+                  }
+
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     MyRouter.home,
