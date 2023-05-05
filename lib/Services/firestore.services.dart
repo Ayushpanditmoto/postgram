@@ -29,8 +29,9 @@ class FirestoreMethods {
       PostModel post = PostModel(
           photoUrl: photoUrl,
           content: content,
-          uuid: uid,
-          like: [],
+          uid: uid,
+          datePublished: DateTime.now(),
+          likes: [],
           postId: postId);
 
       await _firestore.collection('confession').doc(postId).set(

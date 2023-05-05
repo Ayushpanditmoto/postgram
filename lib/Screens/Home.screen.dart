@@ -1,4 +1,4 @@
-import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:postgram/Screens/export.allscreen.dart';
@@ -6,6 +6,7 @@ import 'package:postgram/Services/auth.services.dart';
 import 'package:postgram/Utils/route.reuse.dart';
 import 'package:provider/provider.dart';
 
+import '../Components/post.component.dart';
 import '../Providers/theme.provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               const DrawerHeader(
-                child: Text('Drawer Header'),
+                child: Center(child: Text('Postgram')),
               ),
               ListTile(
                 title: const Text('Logout'),
@@ -70,8 +71,52 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        body: const Center(
-          child: Text('Home Screen'),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 1));
+          },
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('confession')
+                  .orderBy('datePublished', descending: true)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Something went wrong'),
+                  );
+                } else if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text('No Confession'),
+                  );
+                }
+
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Post(
+                              isAdminCheck: false,
+                              snaps: snapshot.data!.docs[index].data(),
+                              index: snapshot.data!.docs.length - index - 1,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(

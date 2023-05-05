@@ -275,6 +275,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                 );
                               } else {
+                                if (image == null) {
+                                  ToastService.show(
+                                    msg: "Please select an image",
+                                  );
+                                  return;
+                                }
+
                                 final res = await AuthMethod().signUpUser(
                                   email: emailC.text,
                                   password: passwordC.text,

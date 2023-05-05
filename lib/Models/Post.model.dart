@@ -1,41 +1,45 @@
-// To parse this JSON data, do
-//
-//     final postModel = postModelFromJson(jsonString);
-
-import 'dart:convert';
-
-PostModel postModelFromJson(String str) => PostModel.fromJson(json.decode(str));
-
-String postModelToJson(PostModel data) => json.encode(data.toJson());
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
-  String postId;
-  String uuid;
-  String content;
-  String photoUrl;
-  List<String> like;
+  final String content;
+  final String uid;
+  final List likes;
+  final String postId;
+  final DateTime datePublished;
+  final String photoUrl;
+  final bool isApproved;
 
-  PostModel({
-    required this.postId,
-    required this.uuid,
+  const PostModel({
     required this.content,
-    required this.photoUrl,
-    required this.like,
+    required this.uid,
+    required this.likes,
+    required this.postId,
+    required this.datePublished,
+    this.photoUrl = '',
+    this.isApproved = false,
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
-        postId: json["postId"],
-        uuid: json["uuid"],
-        content: json["content"],
-        photoUrl: json["photoUrl"],
-        like: List<String>.from(json["like"].map((x) => x)),
-      );
+  static PostModel fromSnap(DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+
+    return PostModel(
+      content: snapshot["content"],
+      uid: snapshot["uid"],
+      likes: snapshot["likes"],
+      postId: snapshot["postId"],
+      datePublished: snapshot["datePublished"],
+      photoUrl: snapshot['photoUrl'],
+      isApproved: snapshot['isApproved'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "postId": postId,
-        "uuid": uuid,
         "content": content,
-        "photoUrl": photoUrl,
-        "like": List<dynamic>.from(like.map((x) => x)),
+        "uid": uid,
+        "likes": likes,
+        "postId": postId,
+        "datePublished": datePublished,
+        'photoUrl': photoUrl,
+        'isApproved': isApproved,
       };
 }
