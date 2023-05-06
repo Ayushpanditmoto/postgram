@@ -260,20 +260,25 @@ class _AuthScreenState extends State<AuthScreen> {
                             });
                             try {
                               if (_authMode == AuthMode.login) {
-                                await AuthMethod().loginUser(
+                                final res = await AuthMethod().loginUser(
                                   email: emailC.text,
                                   password: passwordC.text,
                                 );
-
-                                ToastService.show(
-                                  msg: "Login Success",
-                                );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MyRouter.generateRoute(
-                                    const RouteSettings(name: MyRouter.home),
-                                  ),
-                                );
+                                if (res == "Logged In Successfully") {
+                                  ToastService.show(
+                                    msg: "Login Success",
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MyRouter.generateRoute(
+                                      const RouteSettings(name: MyRouter.home),
+                                    ),
+                                  );
+                                } else {
+                                  ToastService.show(
+                                    msg: res,
+                                  );
+                                }
                               } else {
                                 if (image == null) {
                                   ToastService.show(
