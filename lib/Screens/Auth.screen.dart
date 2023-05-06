@@ -289,7 +289,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                   name: emailC.text.split("@")[0],
                                   image: File(image!.path).readAsBytesSync(),
                                 );
-                                print(res);
 
                                 if (res == "Verification Email Sent") {
                                   Navigator.pushReplacement(

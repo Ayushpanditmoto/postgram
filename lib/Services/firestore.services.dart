@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,6 +28,8 @@ class FirestoreMethods {
       String postId = const Uuid().v4();
 
       PostModel post = PostModel(
+          name: FirebaseAuth.instance.currentUser!.displayName!,
+          profileUrl: FirebaseAuth.instance.currentUser!.photoURL!,
           photoUrl: photoUrl,
           content: content,
           uid: uid,
