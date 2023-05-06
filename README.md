@@ -1,16 +1,33 @@
-# postgram
+# Postgram
 
-A new Flutter project.
+PostGram is a Social Media Application Build on Flutter +FireBase+Cloudinary
 
-## Getting Started
+### APK Link
 
-This project is a starting point for a Flutter application.
+[Download APK](https://drive.google.com/file/d/1aKiVVRSZELX_AUiQbkWH49bBtVfOZieY/view?usp=share_link)
 
-A few resources to get you started if this is your first Flutter project:
+### Login Credentials
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ayushpanditmoto@gmail.com
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+12345678
+
+### Plugins Used
+
+- cached_network_image
+- cloud_firestore
+- cloudinary
+- cupertino_icons
+- firebase_auth
+- firebase_core
+- flutter_image_compress
+- fluttertoast
+- google_fonts
+- http
+- image_picker
+- intl
+- provider
+- share_plus
+- shared_preferences
+- shimmer
+- uuid
